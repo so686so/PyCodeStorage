@@ -33,8 +33,9 @@ CORE_ENCODING_FORMAT    = 'utf-8'                       # 파일 Read 할 때, �
 
 # VAR
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-JSON_PATH = r'./Data/CodeList.json'
-
+JSON_PATH   = r'./Data/CodeList.json'
+EACH_PATH   = 'Path'
+EACH_EXE    = 'RunFileName'
 
 # Link VAR
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

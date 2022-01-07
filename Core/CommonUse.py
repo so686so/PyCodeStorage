@@ -30,6 +30,11 @@ SHOW_LOG        = copy.copy(CORE_SHOW_LOG)
 TEST_MODE       = copy.copy(CORE_TEST_MODE)
 ERROR_STRICT    = copy.copy(CORE_ERROR_STRICT)
 
+# Defines Return
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+RUN_DONE_WHEN_FALSE = False
+RUN_DONE_WHEN_TRUE  = True
+
 
 # Color Defines
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -82,7 +87,7 @@ def showLog(Msg, bTime=False):
                 INPUT   -> showLog("Hello World!", True)
                 OUTPUT  -> [09:48:22] HelloWorld
     """
-    if SHOW_LOG:
+    if getCoreValue('CORE_SHOW_LOG'):
         if bTime:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {Msg}")
         else:
@@ -108,7 +113,7 @@ def NoticeLog(Msg, bTime=False):
                 OUTPUT  -> [09:51:04] [ Notice ] : HelloWorld
     """
     NoticeMsg = f"[ {CYELLOW}Notice{CRESET} ] "
-    if SHOW_LOG:
+    if getCoreValue('CORE_SHOW_LOG'):
         if bTime:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {NoticeMsg}{Msg}")
         else:
@@ -143,7 +148,7 @@ def ErrorLog(Msg, bTime=False, lineNum=0, errorFuncName=None, errorFileName=None
     """
     ErrorMsg = f"[ {CRED}Error{CRESET} ] "
 
-    if SHOW_LOG:
+    if getCoreValue('CORE_SHOW_LOG'):
         if bTime:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {ErrorMsg}{Msg}")
         else:
@@ -216,7 +221,7 @@ def SuccessLog(Msg, bTime=False):
     """
     SuccessMsg = f"[ {CGREEN}Done{CRESET} ] "
 
-    if SHOW_LOG:
+    if getCoreValue('CORE_SHOW_LOG'):
         if bTime:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {SuccessMsg}{Msg}")
         else:
@@ -236,7 +241,7 @@ def ModeLog(Msg, bTime=False):
     """
     ModeMsg = f"[ {CSKY}MODE{CRESET} ] "
 
-    if SHOW_LOG:
+    if getCoreValue('CORE_SHOW_LOG'):
         if bTime:
             print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] {ModeMsg}{Msg}")
         else:
@@ -257,7 +262,7 @@ def RunFunctionLog(AddMsg=""):
             INPUT   -> RunFunctionLog("This is TestCode XD")
             OUTPUT  -> [09:56:06] : c:\PythonProject\AnnotationProgram\main.py-> Run() This is TestCode XD
     """
-    if SHOW_LOG:
+    if getCoreValue('CORE_SHOW_LOG'):
         print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] : {inspect.getmodule((inspect.stack()[1])[0]).__file__}-> {callername()}() {AddMsg}")
 
 
@@ -482,8 +487,8 @@ def showErrorList():
 def CheckExit(CheckName):
     if CheckName == 'EXIT':
         NoticeLog('PyCode Storage Program Finished... Close still running programs\n')
-        return True
-    return False
+        return RUN_DONE_WHEN_TRUE
+    return RUN_DONE_WHEN_FALSE
 
 
 # Check File or Dir Exist
@@ -511,6 +516,8 @@ def setResultDir(resDirPath):
     if os.path.isdir(resDirPath) is False:
         os.makedirs(resDirPath, exist_ok=True)
         NoticeLog(f'{resDirPath} is Not Exists, Create Done')
+        return RUN_DONE_WHEN_FALSE
+    return RUN_DONE_WHEN_TRUE
 
 # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 def writeListToFile(filePath, wList, encodingFormat=CORE_ENCODING_FORMAT):
@@ -536,22 +543,3 @@ def showListLog(showList):
         return
     for eachElem in showList:
         showLog(f'- {eachElem}')
-
-
-# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-def getImageSearchDict(SearchDir, filterFormat):
-    CheckExistDir(SearchDir)
-    resDict = {}
-
-    for root, _, files in os.walk(SearchDir):
-        if len(files) > 0:
-            for file in files:
-                _, ext = os.path.splitext(file)
-                if ext in filterFormat:
-                    resDict[file] = root
-    
-    if resDict:
-        SuccessLog(f'Get ImageData Done << {SearchDir}')
-        return resDict
-
-    return None

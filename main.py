@@ -1,9 +1,12 @@
-import subprocess
+# IMPORT
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 import os
-import json
 
-from Core.JsonManage import JsonManage
-from CoreDefine import *
+
+# IMPORT CORE
+# -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+from Core.CodeManage    import CodeManage
+from CoreDefine         import *
 
 
 PATH = r''
@@ -11,15 +14,24 @@ PATH = r''
 CodeListDict = {}
 
 
-json = JsonManage()
-json.openJsonFile(JSON_PATH)
-CodeListDict = json.getJsonDict()
+# json = JsonManage()
+# json.openJsonFile(JSON_PATH)
+# CodeListDict = json.getJsonDict()
 
-ChoiceProgram = 'AttributeProgram'
+# ChoiceProgram = 'AttributeProgram'
 
-PATH = CodeListDict[ChoiceProgram]['Path']
-FILE = CodeListDict[ChoiceProgram]['RunFileName']
+# PATH = CodeListDict[ChoiceProgram]['Path']
+# FILE = CodeListDict[ChoiceProgram]['RunFileName']
 
-print(f'START : {PATH} -> {FILE}')
-os.chdir(PATH)
-a = subprocess.run(f'python {FILE}')
+# print(f'START : {PATH} -> {FILE}')
+# os.chdir(PATH)
+# a = subprocess.run(f'python {FILE}')
+
+if __name__ == "__main__":
+    CM = CodeManage()
+    
+    Num = CM.getNumByAlias('AttributeProgram')
+    print(f'> SelectNum : {Num}')
+    
+    CM.moveTargetDir(CM.getCodePathList()[Num])
+    CM.runCode(CM.getCodeFileNameList()[Num])
